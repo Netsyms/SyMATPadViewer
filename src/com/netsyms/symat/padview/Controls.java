@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2015, Netsyms Technologies
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ public class Controls extends javax.swing.JPanel {
             try {
                 File filedata = FileUtils.getFileWithExtension(fc);
                 FileUtils.saveFile(contents, filedata.getAbsolutePath(), true);
-                GUI.statusLbl.setText("Saved "+filedata.getName());
+                GUI.statusLbl.setText("Saved " + filedata.getName());
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null,
                         "Error:  Cannot save file: " + ex.getMessage());
@@ -90,6 +90,7 @@ public class Controls extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         previewBtn = new javax.swing.JButton();
         delBtn = new javax.swing.JButton();
+        expandBtn = new javax.swing.JButton();
 
         jLabel1.setText("My Pads:");
 
@@ -153,6 +154,14 @@ public class Controls extends javax.swing.JPanel {
             }
         });
 
+        expandBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/netsyms/symat/padview/pop.png"))); // NOI18N
+        expandBtn.setEnabled(false);
+        expandBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                expandBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -174,7 +183,8 @@ public class Controls extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(0, 296, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 286, Short.MAX_VALUE)
+                        .addComponent(expandBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2)))
         );
         layout.setVerticalGroup(
@@ -183,7 +193,8 @@ public class Controls extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(addBtn))
+                    .addComponent(addBtn)
+                    .addComponent(expandBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -219,7 +230,13 @@ public class Controls extends javax.swing.JPanel {
     }
 
     private void updateList() {
+        int sel = padPane.getSelectedIndex();
         padPane.setListData(PadUtils.getPads());
+        try {
+            padPane.setSelectedIndex(sel);
+        } catch (Exception ex) {
+            
+        }
     }
 
     private void padPaneValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_padPaneValueChanged
@@ -232,6 +249,7 @@ public class Controls extends javax.swing.JPanel {
         saveBtn.setEnabled(enable);
         previewBtn.setEnabled(enable);
         delBtn.setEnabled(enable);
+        expandBtn.setEnabled(enable);
     }//GEN-LAST:event_padPaneValueChanged
 
     private void openBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openBtnActionPerformed
@@ -252,19 +270,26 @@ public class Controls extends javax.swing.JPanel {
 
     private void delBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtnActionPerformed
         int ans = JOptionPane.showConfirmDialog(this,
-            "Remove pad from list?  It will not be removed from the server.",
-            "Delete?",
-            JOptionPane.OK_CANCEL_OPTION);
+                "Remove pad from list?  It will not be removed from the server.",
+                "Delete?",
+                JOptionPane.OK_CANCEL_OPTION);
         if (ans == JOptionPane.OK_OPTION) {
             PadUtils.delPad(getSelectedPad());
         }
         updateList();
     }//GEN-LAST:event_delBtnActionPerformed
 
+    private void expandBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expandBtnActionPerformed
+        PopoutView pop = new PopoutView(PadUtils.getPad(getSelectedPad()), getSelectedPad());
+        pop.setLocationRelativeTo(this);
+        pop.setVisible(true);
+    }//GEN-LAST:event_expandBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JButton delBtn;
+    private javax.swing.JButton expandBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
