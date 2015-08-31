@@ -25,6 +25,8 @@
  */
 package com.netsyms.symat.padview;
 
+import static com.netsyms.symat.padview.GUI.logo;
+
 /**
  *
  * @author Skylar
@@ -38,6 +40,7 @@ public class PopoutView extends javax.swing.JFrame {
      */
     public PopoutView(String content, String title) {
         initComponents();
+        setIconImages(logo);
         textBox.setText(content);
         setTitle(getTitle() + title);
         if (!PrefStorage.getSetting("wrapLines").equals("")) {
